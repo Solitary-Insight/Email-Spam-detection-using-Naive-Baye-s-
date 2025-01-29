@@ -1,0 +1,22 @@
+SPAM|Congratulations! You've won a free iPhone. Click here to claim now.
+SPAM|Win a $1000 Walmart gift card. Click here to claim!
+SPAM|Urgent! Update your bank account details to avoid suspension.
+SPAM|Get a personal loan at 0% interest. Limited offer, apply today!
+SPAM|FREE entry into our $500 gift card raffle! Reply YES to enter.
+SPAM|Claim your free vacation now! Offer expires in 24 hours.
+SPAM|Hot singles in your area are waiting to chat. Click the link to join.s
+SPAM|Exclusive deal! Buy 1 get 1 free on all items. Limited time only.
+SPAM|Your PayPal account has been suspended. Verify it now to reactivate.
+SPAM|You have been selected for a $100 cash reward. Click to redeem.
+
+HAM|Hey, are we still meeting for lunch at 1 PM?
+HAM|Please review the attached report and share your feedback.
+HAM|Let’s schedule the project meeting for next week.
+HAM|The document is ready. Please check your email for the attachment.
+HAM|Don’t forget to pick up groceries on your way back home.
+HAM|Good morning! Just checking in to see how you’re doing.
+HAM|Thanks for your help with the presentation yesterday.
+HAM|Can we postpone the call to 3 PM instead of 2 PM?
+HAM|Here’s the latest version of the code. Let me know your thoughts.
+HAM|Happy birthday! Hope you have a fantastic day ahead.
+
