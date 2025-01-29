@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spam Detection System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    .header p {
+      color: #666;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: none;
+      height: 100px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+    .result.text-danger {
+      color: #e74c3c;
+    }
+    .result.text-success {
+      color: #2ecc71;
+    }
+    .history-table {
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table thead {
+      background: #f0f0f0;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      text-align: left;
+      padding: 10px;
+    }
+    table th {
+      font-weight: bold;
+    }
+    table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    table tr:nth-child(odd) {
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <div class="header">
+      <h1>Spam Detection System</h1>
+      <p>Enter a message below to classify it as spam or ham.</p>
+    </div>
+
+    <!-- Input Form Section -->
+    <div class="card">
+      <form id="inputForm">
+        <div>
+          <label for="userInput">Enter your message:</label>
+          <textarea id="userInput" placeholder="Type your message here..." required></textarea>
+        </div>
+        <button type="submit">Classify</button>
+      </form>
+    </div>
+
+    <!-- Prediction Result Section -->
+    <div class="card">
+      <h4>Prediction Result</h4>
+      <div id="result" class="result">No prediction yet...</div>
+    </div>
+
+    <!-- History Section -->
+    <div class="card">
+      <h4>Prediction History</h4>
+      <div class="history-table">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Message</th>
+              <th>Prediction</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <!-- History rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const inputForm = document.getElementById('inputForm');
+    const resultDiv = document.getElementById('result');
+    const historyTableBody = document.getElementById('historyTableBody');
+    let history = [];
+
+    // Handle form submission
+    inputForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      
+      // Get user input
+      const userInput = document.getElementById('userInput').value.trim();
+      if (!userInput) return;
+
+      // Send input to the server
+      try {
+        const response = await fetch('http://localhost:5000/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: userInput }),
+        });
+
+        const data = await response.json();
+        const prediction = data.prediction;
+
+        // Update the result display
+        resultDiv.textContent = prediction === 'spam' ? "The message is classified as SPAM." : "The message is classified as HAM.";
+        resultDiv.className = prediction === 'spam' ? 'result text-danger' : 'result text-success';
+
+        // Update history
+        history.push({ message: userInput, prediction });
+        updateHistoryTable();
+      } catch (error) {
+        console.error('Error:', error);
+        resultDiv.textContent = 'Error while predicting. Please try again.';
+        resultDiv.className = 'result text-danger';
+      }
+    });
+
+    // Update the history table
+    function updateHistoryTable() {
+      historyTableBody.innerHTML = '';
+      history.forEach((entry, index) => {
+        const row = `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${entry.message}</td>
+            <td class="${entry.prediction === 'spam' ? 'text-danger' : 'text-success'}">${entry.prediction.toUpperCase()}</td>
+          </tr>
+        `;
+        historyTableBody.innerHTML += row;
+      });
+    }
+  </script>
+</body>
+</html>
